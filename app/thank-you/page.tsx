@@ -353,6 +353,26 @@ function ThankYouV1() {
           </p>
         </div>
 
+        {/* Standalone welcome video (16:9) */}
+        <div className="mb-8">
+          <div className="text-center mb-3">
+            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">Watch This</p>
+            <h2 className="text-xl font-bold text-gray-900">A Quick Video While You Wait</h2>
+          </div>
+          <div className="mx-auto max-w-2xl overflow-hidden rounded-2xl border border-gray-200 bg-black shadow-sm">
+            <video
+              src="https://8zvefdozusmwhy4a.public.blob.vercel-storage.com/9WebsiteVid.mp4"
+              controls
+              autoPlay
+              muted
+              playsInline
+              preload="metadata"
+              className="w-full block"
+              style={{ aspectRatio: "16/9", objectFit: "cover" }}
+            />
+          </div>
+        </div>
+
         {/* Video section */}
         {process.env.NEXT_PUBLIC_THANKYOU_VIDEO_URL && (
           <div className="mb-8">
