@@ -3,6 +3,7 @@ import Link from "next/link"
 import { CheckCircle2, Phone, MessageSquare } from "lucide-react"
 import config from "@/lib/config"
 import { ClickToPlayVideo } from "@/components/thankyou/click-to-play-video"
+import { WelcomeVideo } from "@/components/thankyou/welcome-video"
 import { ContactCTA } from "@/components/article/contact-cta"
 import { ARTICLES } from "@/lib/articles"
 import { isYouTubeUrl, toYouTubeEmbed } from "@/lib/youtube"
@@ -351,6 +352,17 @@ function ThankYouV1() {
             The {config.companyName} team has received your information and will be in touch within{" "}
             <strong>24 hours</strong> with your cash offer. In the meantime, here are answers to common questions.
           </p>
+        </div>
+
+        {/* Standalone welcome video (16:9) */}
+        <div className="mb-8">
+          <div className="text-center mb-3">
+            <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-2">Watch This</p>
+            <h2 className="text-xl font-bold text-gray-900">A Quick Video While You Wait</h2>
+          </div>
+          <div className="md:-mx-16">
+            <WelcomeVideo src="https://8zvefdozusmwhy4a.public.blob.vercel-storage.com/9WebsiteVid.mp4" />
+          </div>
         </div>
 
         {/* Video section */}
