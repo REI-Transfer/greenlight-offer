@@ -336,8 +336,22 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
           gf_sid: readGfSid(),
           ...trackingRef.current,
         }
+        // Submit FIRST; only fire the Meta Pixel on a CONFIRMED successful submit, so a
+        // rejected/failed submit can no longer count a phantom Lead in Meta.
+        let submitOk = false
+        try {
+          const res = await fetch('/api/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+          const json = await res.json().catch(() => ({} as { success?: boolean }))
+          submitOk = res.ok && json.success === true
+        } catch {
+          // network error — submitOk stays false; no pixel fires
+        }
         // Fire weighted Meta Pixel event (browser-side; CAPI is a separate later phase)
-        if (typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
+        if (submitOk && typeof window !== 'undefined' && (window as { fbq?: (...args: unknown[]) => void }).fbq) {
           const fbq = (window as { fbq: (...args: unknown[]) => void }).fbq
           // content_name uses the brand from config so each cloned client gets the right label automatically
           const brandName = (typeof window !== 'undefined' && (window as unknown as { __NEXT_DATA__?: { runtimeConfig?: { companyName?: string } } }).__NEXT_DATA__?.runtimeConfig?.companyName) || 'REI Survey'
@@ -354,11 +368,6 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
             }, { eventID: eventId })
           }
         }
-        await fetch('/api/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
       } catch (e) {
         // Continue to thank-you even if webhook fails
       }
