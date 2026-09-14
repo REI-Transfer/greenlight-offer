@@ -122,12 +122,27 @@ export function AddressAutocomplete({
   const initAutocomplete = () => {
     if (!inputRef.current || !window.google?.maps?.places) return
 
-    // Build bounds covering all service area circles
+    // Build bounds covering all service area circles.
+    // Only use circles whose centerLat/centerLng/radiusMiles are FINITE numbers.
+    // A malformed SERVICE_AREAS value (e.g. wrong key shape like {lat,lng}) would
+    // otherwise produce NaN offsets → NaN bounds, which Google Places rejects with
+    // "This page can't load Google Maps correctly". Fail open to country:us (no
+    // bounds/strictBounds) rather than ever passing NaN.
     let bounds: google.maps.LatLngBounds | undefined
-    const hasServiceAreas = serviceAreas.length > 0
-    if (hasServiceAreas) {
+    const validAreas = serviceAreas.filter(
+      area =>
+        Number.isFinite(area?.centerLat) &&
+        Number.isFinite(area?.centerLng) &&
+        Number.isFinite(area?.radiusMiles)
+    )
+    if (validAreas.length !== serviceAreas.length && process.env.NODE_ENV !== "production") {
+      console.warn(
+        "[address-autocomplete] Ignoring SERVICE_AREAS entries with non-finite centerLat/centerLng/radiusMiles; check the env key shape."
+      )
+    }
+    if (validAreas.length > 0) {
       bounds = new google.maps.LatLngBounds()
-      serviceAreas.forEach(area => {
+      validAreas.forEach(area => {
         // Approximate circle bounding box (1 degree lat ≈ 69 miles)
         const latOffset = area.radiusMiles / 69
         const lngOffset = area.radiusMiles / (69 * Math.cos(area.centerLat * Math.PI / 180))
