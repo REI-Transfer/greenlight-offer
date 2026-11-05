@@ -499,10 +499,11 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
       noEquity: {
         title: "We're Unable to Make an Offer",
         message: "Unfortunately, based on how long you've owned the property, there typically isn't enough equity for us to make a fair cash offer.",
-        detail: "If your situation changes or you'd like to discuss your options, feel free to give us a call. We're always happy to help.",
+        detail: "If you feel like we made a mistake, text us at this number.",
       },
     }
     const msg = disqualifyMessages[disqualifyReason] || disqualifyMessages.notOwner
+    const textUs = disqualifyReason === "excellentCondition" || disqualifyReason === "noEquity"
 
     return (
       <div className="w-full max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">
@@ -516,10 +517,10 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
             <p className="mt-4 text-sm text-gray-500">{msg.detail}</p>
           </div>
           <a
-            href={`${disqualifyReason === "excellentCondition" ? "sms" : "tel"}:${phoneHref}`}
+            href={`${textUs ? "sms" : "tel"}:${phoneHref}`}
             className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-white hover:opacity-90 transition-opacity"
           >
-            {disqualifyReason === "excellentCondition" ? "Text Us" : "Call Us"}: {phoneDisplay}
+            {textUs ? "Text Us" : "Call Us"}: {phoneDisplay}
           </a>
         </div>
       </div>

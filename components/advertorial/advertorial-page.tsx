@@ -333,7 +333,7 @@ export function AdvertorialPage({
             { q: "How fast can you close?", a: "As fast as you like. We put a written offer in your hands within 24 hours, and we can close in as little as two weeks. If you need more time to pack or line up your next place, we close on your timeline. We handle the title work and the paperwork." },
             { q: "Are there any fees or commissions?", a: "No. There are no agent commissions, no listing fees, and no closing costs charged to you. The number we agree on is the number you walk away with." },
             { q: "How do you decide on the offer?", a: `We look at your home's location across ${where}, its current condition, and recent sales of comparable homes nearby. Then we show you the plain math behind the number. No black box. You see how we got there before you ever commit.` },
-            { q: "Do I have to make repairs or clean it out?", a: "No. We buy as-is, in any condition. Leave behind whatever you do not want. You fix nothing, stage nothing, and host not a single showing." },
+            { q: "Do I have to make repairs or clean it out?", a: "No. We buy houses as-is. Leave behind whatever you do not want. You fix nothing, stage nothing, and host not a single showing." },
             { q: "What is the catch?", a: `There is not one, and we understand exactly why you ask. ${companyName} is a real local company buying houses across ${where}. The offer is no-obligation and the process stays private. You are welcome to check us through the BBB and our reviews before you sign a thing. And if a cash sale is not your best move, we will tell you so.` },
           ].map((f) => (
             <details key={f.q} style={{ borderBottom: `1px solid ${C.rule}` }} className="py-1">

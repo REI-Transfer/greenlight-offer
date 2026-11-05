@@ -433,7 +433,7 @@ export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPro
         <p className="text-sm md:text-base text-gray-600 max-w-md mx-auto">
           {DQ_REASONS[dq]}
         </p>
-        {dq === "excellentCondition" && phoneHref && (
+        {(dq === "excellentCondition" || dq === "noEquity") && phoneHref && (
           <>
             <p className="mt-3 text-sm md:text-base text-gray-600 max-w-md mx-auto">
               If you feel like we made a mistake, text us at this number.
