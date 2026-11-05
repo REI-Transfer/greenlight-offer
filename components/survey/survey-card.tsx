@@ -503,7 +503,11 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
       },
     }
     const msg = disqualifyMessages[disqualifyReason] || disqualifyMessages.notOwner
-    const textUs = disqualifyReason === "excellentCondition" || disqualifyReason === "noEquity"
+    const textMessages: Record<string, string> = {
+      excellentCondition: "Your form said I don't qualify for an offer because my home is in excellent condition, but I'm still interested in an offer.",
+      noEquity: "Your form said I don't qualify for an offer because of how long I've owned my home, but I'm still interested in an offer.",
+    }
+    const textBody = textMessages[disqualifyReason]
 
     return (
       <div className="w-full max-w-2xl rounded-2xl border border-gray-200 bg-white p-6 shadow-lg">
@@ -517,10 +521,10 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
             <p className="mt-4 text-sm text-gray-500">{msg.detail}</p>
           </div>
           <a
-            href={`${textUs ? "sms" : "tel"}:${phoneHref}`}
+            href={textBody ? `sms:${phoneHref}?&body=${encodeURIComponent(textBody)}` : `tel:${phoneHref}`}
             className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-white hover:opacity-90 transition-opacity"
           >
-            {textUs ? "Text Us" : "Call Us"}: {phoneDisplay}
+            {textBody ? "Text Us" : "Call Us"}: {phoneDisplay}
           </a>
         </div>
       </div>

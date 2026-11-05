@@ -96,6 +96,11 @@ const DQ_REASONS = {
 } as const
 type DqKey = keyof typeof DQ_REASONS
 
+const DQ_TEXT_MESSAGES: Partial<Record<DqKey, string>> = {
+  excellentCondition: "Your form said I don't qualify for an offer because my home is in excellent condition, but I'm still interested in an offer.",
+  noEquity: "Your form said I don't qualify for an offer because of how long I've owned my home, but I'm still interested in an offer.",
+}
+
 function checkHardDq(key: keyof FormState, value: string): DqKey | null {
   if (key === "whoAreYou" && (value === "agent" || value === "wholesaler" || value === "other")) return "notOwner"
   if (key === "listedOnMarket" && value === "yes") return "listed"
@@ -433,13 +438,13 @@ export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPro
         <p className="text-sm md:text-base text-gray-600 max-w-md mx-auto">
           {DQ_REASONS[dq]}
         </p>
-        {(dq === "excellentCondition" || dq === "noEquity") && phoneHref && (
+        {DQ_TEXT_MESSAGES[dq] && phoneHref && (
           <>
             <p className="mt-3 text-sm md:text-base text-gray-600 max-w-md mx-auto">
               If you feel like we made a mistake, text us at this number.
             </p>
             <a
-              href={`sms:${phoneHref}`}
+              href={`sms:${phoneHref}?&body=${encodeURIComponent(DQ_TEXT_MESSAGES[dq] ?? "")}`}
               className="mt-4 inline-block rounded-xl px-6 py-3 font-semibold text-white hover:opacity-90 transition-opacity"
               style={{ backgroundColor: accentColor }}
             >
