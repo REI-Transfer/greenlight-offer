@@ -254,7 +254,7 @@ function StepHeader({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPropertyTypes, allowedStates, phoneHref, phoneDisplay = [], motivationV2 = false }: Props) {
+export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPropertyTypes, allowedStates = [], phoneHref, phoneDisplay, motivationV2 = false }: Props) {
   const [step, setStep] = useState(1)
   const TOTAL_STEPS = 9
   const [outsideAreaError, setOutsideAreaError] = useState(false)
