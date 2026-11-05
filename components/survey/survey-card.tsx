@@ -417,6 +417,10 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
       setTimeout(() => { setDisqualifyReason("notOwner"); setIsDisqualified(true) }, 300)
       return
     }
+    if (field === "condition" && value === "excellent") {
+      setTimeout(() => { setDisqualifyReason("excellentCondition"); setIsDisqualified(true) }, 300)
+      return
+    }
     // Ownership-length hard DQ (DISQUALIFIED_OWNERSHIP_LENGTHS). Empty prop (default)
     // → inert: [].includes(value) is always false, so the step advances as today.
     if (field === "ownershipLength" && disqualifiedOwnershipLengths.includes(value)) {
@@ -485,6 +489,11 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
         title: "Just Browsing?",
         message: "It sounds like you're gathering information right now rather than looking to sell.",
         detail: "When you're ready to sell, come back and we'll get you a fair cash offer. Feel free to call us any time if your situation changes.",
+      },
+      excellentCondition: {
+        title: "We Can't Make an Offer Right Now",
+        message: "We focus on houses that need repairs or updates, so we're not the best fit for a move-in ready home.",
+        detail: "A home in excellent condition will usually sell for more on the open market. If the house needs more work than you thought, feel free to give us a call.",
       },
       noEquity: {
         title: "We're Unable to Make an Offer",
@@ -625,7 +634,7 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
           <div className="flex flex-col gap-4">
             <div>
               <h2 className="text-2xl font-semibold text-gray-900">What condition is the property in?</h2>
-              <p className="mt-1 text-sm text-gray-500">Be honest - we buy houses in any condition.</p>
+              <p className="mt-1 text-sm text-gray-500">Be honest. It helps us make you a real offer.</p>
             </div>
             <div className="flex flex-col gap-2">
               {CONDITION_OPTIONS.map((option) => renderOptionButton(option, surveyData.condition, "condition"))}
