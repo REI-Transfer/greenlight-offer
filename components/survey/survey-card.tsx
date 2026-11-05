@@ -493,7 +493,7 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
       excellentCondition: {
         title: "We Can't Make an Offer Right Now",
         message: "We focus on houses that need repairs or updates, so we're not the best fit for a move-in ready home.",
-        detail: "A home in excellent condition will usually sell for more on the open market. If the house needs more work than you thought, feel free to give us a call.",
+        detail: "A home in excellent condition will usually sell for more on the open market. If you feel like we made a mistake, text us at this number.",
       },
       noEquity: {
         title: "We're Unable to Make an Offer",
@@ -515,10 +515,10 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
             <p className="mt-4 text-sm text-gray-500">{msg.detail}</p>
           </div>
           <a
-            href={`tel:${phoneHref}`}
+            href={`${disqualifyReason === "excellentCondition" ? "sms" : "tel"}:${phoneHref}`}
             className="mt-2 inline-flex items-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-white hover:opacity-90 transition-opacity"
           >
-            Call Us: {phoneDisplay}
+            {disqualifyReason === "excellentCondition" ? "Text Us" : "Call Us"}: {phoneDisplay}
           </a>
         </div>
       </div>

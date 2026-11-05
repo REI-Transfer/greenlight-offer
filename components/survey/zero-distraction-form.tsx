@@ -254,7 +254,7 @@ function StepHeader({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPropertyTypes, allowedStates = [], motivationV2 = false }: Props) {
+export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPropertyTypes, allowedStates, phoneHref, phoneDisplay = [], motivationV2 = false }: Props) {
   const [step, setStep] = useState(1)
   const TOTAL_STEPS = 9
   const [outsideAreaError, setOutsideAreaError] = useState(false)
@@ -430,6 +430,20 @@ export function ZeroDistractionForm({ accentColor, serviceAreas, disqualifiedPro
         <p className="text-sm md:text-base text-gray-600 max-w-md mx-auto">
           {DQ_REASONS[dq]}
         </p>
+        {dq === "excellentCondition" && phoneHref && (
+          <>
+            <p className="mt-3 text-sm md:text-base text-gray-600 max-w-md mx-auto">
+              If you feel like we made a mistake, text us at this number.
+            </p>
+            <a
+              href={`sms:${phoneHref}`}
+              className="mt-4 inline-block rounded-xl px-6 py-3 font-semibold text-white hover:opacity-90 transition-opacity"
+              style={{ backgroundColor: accentColor }}
+            >
+              Text Us: {phoneDisplay}
+            </a>
+          </>
+        )}
       </div>
     )
   }
