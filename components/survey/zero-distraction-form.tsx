@@ -91,6 +91,7 @@ const DQ_REASONS = {
   listed: "Your home is currently listed on the market, so we can't make an offer right now. Once it's off-market, we'd be glad to take a look.",
   exploring: "It sounds like you're just gathering information right now. When you're ready to sell, come back and we'll get you a cash offer.",
   noReason: "It sounds like you're just gathering information right now. When you're ready to sell, come back and we'll get you a cash offer.",
+  noEquity: "Based on how long you've owned the property, there typically isn't enough equity for us to make a fair cash offer.",
   excellentCondition: "We focus on houses that need repairs or updates, so we're not the best fit for a move-in ready home. A home in excellent condition will usually sell for more on the open market.",
 } as const
 type DqKey = keyof typeof DQ_REASONS
@@ -100,6 +101,7 @@ function checkHardDq(key: keyof FormState, value: string): DqKey | null {
   if (key === "listedOnMarket" && value === "yes") return "listed"
   if (key === "timeline" && value === "exploring") return "exploring"
   if (key === "condition" && value === "excellent") return "excellentCondition"
+  if (key === "yearsOwned" && (value === "0-2" || value === "3-5")) return "noEquity"
   // v2 motivation list (MOTIVATION_V2): "no reason / seeing what my house is worth"
   // hard-disqualifies. The id only exists in REASON_OPTIONS_V2, so this is inert
   // for the legacy list.
@@ -164,6 +166,7 @@ const YEARS_OWNED_OPTIONS: Choice[] = [
   { id: "6-10",  label: "6 to 10 years",          icon: Anchor },
   { id: "11-20", label: "11 to 20 years",         icon: TrendingUp },
   { id: "20+",   label: "More than 20 years",     icon: Crown },
+  { id: "inherited", label: "I recently inherited the home", icon: KeyRound },
 ]
 
 const REASON_OPTIONS: Choice[] = [

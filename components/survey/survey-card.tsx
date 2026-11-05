@@ -91,6 +91,7 @@ const OWNERSHIP_LENGTH_OPTIONS = [
   { id: "3-to-5", label: "3 to 5 years" },
   { id: "5-to-10", label: "5 to 10 years" },
   { id: "10-plus", label: "10+ years" },
+  { id: "inherited", label: "I recently inherited the home" },
 ]
 
 // ─── Lead scoring (browser-side) ───────────────────────────────────────
