@@ -20,7 +20,7 @@ export function Footer({
           <p className="text-sm font-semibold text-gray-700">{companyName}</p>
 
           <p className="text-sm text-gray-500">
-            We buy houses in any condition. No obligation, no pressure.
+            We buy houses as-is. No obligation, no pressure.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-gray-500">

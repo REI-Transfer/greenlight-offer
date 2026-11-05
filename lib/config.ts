@@ -49,7 +49,7 @@ const config = {
 
   // Survey disqualification — comma-separated ownership-length option IDs to hard-
   // disqualify (e.g. "less-than-3,3-to-5" to block under-5-year owners). Valid IDs:
-  // less-than-3, 3-to-5, 5-to-10, 10-plus. Empty (default) → no ownership gate →
+  // less-than-3, 3-to-5, 5-to-10, 10-plus, inherited. Empty (default) → no ownership gate →
   // byte-identical legacy behavior for all existing rei-survey-template@main
   // projects that never set DISQUALIFIED_OWNERSHIP_LENGTHS.
   disqualifiedOwnershipLengths: process.env.DISQUALIFIED_OWNERSHIP_LENGTHS ?? "",
