@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { captureTrackingData, getIPAddress, readGfSid } from "@/lib/tracking"
 import { Input } from "@/components/ui/input"
 import { AddressAutocomplete, type AddressDetails, type ServiceArea } from "./address-autocomplete"
+import { RecordSurveyCard } from "@/components/v2/record-survey-card"
+import { RECORD_BRAND } from "@/lib/brand"
 
 interface SurveyData {
   address: string
@@ -213,6 +215,10 @@ function validateName(name: string): { valid: boolean; msg: string } {
 }
 
 interface SurveyCardProps {
+  /** Property-record form handoff (see SurveyCard at the bottom). */
+  onAddressReady?: (address: string) => void
+  /** Company name for the property-record form (from lib/config on the page). */
+  recordCompanyName?: string
   phoneDisplay?: string
   phoneHref?: string
   serviceAreas?: ServiceArea[]
@@ -234,7 +240,7 @@ interface SurveyCardProps {
   motivationV2?: boolean
 }
 
-export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "8000000000", serviceAreas = [], disqualifiedPropertyTypes = ["mobile-home", "land", "other"], disqualifiedOwnershipLengths = [], allowedStates = [], initialAddress, initialStep, motivationV2 = false }: SurveyCardProps) {
+function CurrentSurveyCard({ onAddressReady, phoneDisplay = "(800) 000-0000", phoneHref = "8000000000", serviceAreas = [], disqualifiedPropertyTypes = ["mobile-home", "land", "other"], disqualifiedOwnershipLengths = [], allowedStates = [], initialAddress, initialStep, motivationV2 = false }: SurveyCardProps) {
   const [step, setStep] = useState(initialStep && initialStep >= 2 && initialStep <= 7 ? initialStep : 1)
   const [surveyData, setSurveyData] = useState<SurveyData>({
     address: initialAddress ?? "",
@@ -443,7 +449,7 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
     setSurveyData({ ...surveyData, address })
     setAddressVerified(true)
     setAddressOutOfArea(false)
-    setTimeout(() => { setStep(2) }, 300)
+    setTimeout(() => { if (onAddressReady) onAddressReady(address); else setStep(2) }, 300)
   }
 
   const renderOptionButton = (
@@ -766,4 +772,20 @@ export function SurveyCard({ phoneDisplay = "(800) 000-0000", phoneHref = "80000
       </div>
     </div>
   )
+}
+
+// NEXT_PUBLIC_RECORD_FORM=one-step|two-step: after this site's own address step (and its
+// geofence) passes, the property-record form (components/v2/record-survey-card.tsx) takes over.
+// Unset = the current form above, untouched (unset + redeploy = rollback).
+export function SurveyCard(props: SurveyCardProps) {
+  const [handoff, setHandoff] = useState<string | null>(null)
+  if (RECORD_BRAND.recordForm && handoff) {
+    // This site's phone (from the page), unless it's the template placeholder.
+    const p = props as { phoneDisplay?: string; phoneHref?: string }
+    const real = !!p.phoneHref && p.phoneHref.replace(/\D/g, "").replace(/^1/, "") !== "8000000000"
+    const named = props.recordCompanyName ? { ...RECORD_BRAND, companyName: props.recordCompanyName } : RECORD_BRAND
+    const brand = real ? { ...named, phoneDisplay: p.phoneDisplay ?? "", phoneHref: p.phoneHref ?? "" } : named
+    return <RecordSurveyCard initialAddress={handoff} brand={brand} mode={RECORD_BRAND.recordMode} onBackToAddress={() => setHandoff(null)} />
+  }
+  return <CurrentSurveyCard {...props} onAddressReady={RECORD_BRAND.recordForm ? (address: string) => setHandoff(address) : undefined} />
 }
